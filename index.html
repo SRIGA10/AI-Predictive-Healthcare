@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Predictive Healthcare Diagnosis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>🩺 AI Predictive Healthcare Diagnosis</h1>
+
+        <p>
+            AI-powered health risk prediction using Machine Learning
+        </p>
+
+    </div>
+
+
+
+    <!-- PATIENT INPUT -->
+
+    <div class="card">
+
+        <h2>Enter Patient Details</h2>
+
+        <form action="/predict" method="POST">
+
+            <div class="form-grid">
+
+
+                <div class="input-group">
+
+                    <label>Age</label>
+
+                    <input
+                        type="number"
+                        name="age"
+                        placeholder="Enter age"
+                        min="1"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>BMI</label>
+
+                    <input
+                        type="number"
+                        name="bmi"
+                        placeholder="Enter BMI"
+                        step="0.1"
+                        min="1"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>Blood Pressure</label>
+
+                    <input
+                        type="number"
+                        name="bp"
+                        placeholder="Enter BP"
+                        min="1"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>Glucose</label>
+
+                    <input
+                        type="number"
+                        name="glucose"
+                        placeholder="Enter glucose level"
+                        min="1"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>Heart Rate</label>
+
+                    <input
+                        type="number"
+                        name="heart_rate"
+                        placeholder="Enter heart rate"
+                        min="1"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label>Cholesterol</label>
+
+                    <input
+                        type="number"
+                        name="cholesterol"
+                        placeholder="Enter cholesterol"
+                        min="1"
+                        required>
+
+                </div>
+
+
+            </div>
+
+
+            <button type="submit">
+                🔍 Predict Health Risk
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    {% if result %}
+
+
+    <!-- RESULT SECTION -->
+
+    <div class="result-section">
+
+
+        <!-- MAIN RESULT -->
+
+        <div class="result-card">
+
+            <h2>Prediction Result</h2>
+
+
+            <div class="risk {{ risk_class }}">
+
+                {{ result }}
+
+            </div>
+
+
+            <div class="risk-number">
+
+                {{ risk_percentage }}%
+
+            </div>
+
+
+            <p class="risk-label">
+                Estimated Health Risk
+            </p>
+
+
+            <div class="progress-container">
+
+                <div
+                    class="progress-bar {{ risk_class }}"
+                    style="width: {{ risk_percentage }}%;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MODEL RESULTS -->
+
+        <div class="model-grid">
+
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    🌳
+                </div>
+
+                <div>
+
+                    <h3>Decision Tree</h3>
+
+                    <p>{{ dt_result }}</p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    📈
+                </div>
+
+                <div>
+
+                    <h3>Logistic Regression</h3>
+
+                    <p>{{ lr_result }}</p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ANALYSIS -->
+
+        <div class="info-card">
+
+            <h3>💡 Analysis</h3>
+
+            <p>
+                The prediction combines results from the
+                Decision Tree and Logistic Regression models
+                to estimate the patient's overall health risk.
+            </p>
+
+        </div>
+
+
+
+        <!-- PARAMETER INDICATORS -->
+
+        <div class="parameter-card">
+
+            <h3>📊 Patient Parameter Risk Indicators</h3>
+
+            <p class="parameter-description">
+
+                Relative risk indicators based on the
+                entered patient parameters.
+
+            </p>
+
+
+            {% for item in parameter_scores %}
+
+
+            <div class="parameter-row">
+
+
+                <div class="parameter-label">
+
+                    <span>
+                        {{ item.name }}
+                    </span>
+
+                    <strong>
+                        {{ item.value }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="parameter-track">
+
+                    <div
+                        class="parameter-fill {{ risk_class }}"
+                        style="width: {{ item.value * 4 }}%;">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+
+        <!-- MODEL ACCURACY -->
+
+        <div class="chart-card">
+
+            <h3>📊 Model Accuracy Comparison</h3>
+
+            <img
+                src="{{ url_for('static',
+                filename='model_accuracy.png') }}"
+                alt="Model Accuracy Comparison">
+
+        </div>
+
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>
